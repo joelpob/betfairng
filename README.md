@@ -7,7 +7,7 @@ How to use it
 
 To login to Betfair using this library, you'll need both a) a self signed certificate (follow the process [described here]), and b) an application key [directions here]. 
 
-```
+```c#
 BetfairClient client = new BetfairClient(Exchange.AUS, "ASDF1234qwerty");
 client.Login("client-2048.p12", "certpass", "username", "password");
 ```
@@ -16,8 +16,7 @@ Check out the "TestAPI.cs" file for examples on how to use the "BetfairClient" c
 
 The "MarketListener" class is where the magic happens:
 
-```
-
+```c#
 AutoResetEvent waitHandle = new AutoResetEvent(false);
 var marketListener = MarketListener.Create(client, BFHelpers.HorseRacePriceProjection(), 1);
 

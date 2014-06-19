@@ -6,20 +6,16 @@
 *.dll.config
 *.cache
 *.suo
-# Include dlls if they’re in the NuGet packages directory
-!/packages/*/lib/*.dll
-# Include dlls if they're in the CommonReferences directory
-!*CommonReferences/*.dll
+/packages/*/lib/*.dll/*.XML/*.xml
+*CommonReferences/*.dll
 UpgradeLog.XML
 _UpgradeReport_Files/
 bin/
 obj/
 TestResults/
 *.Publish.xml
-# Resharper #
 /_ReSharper.*
 *.ReSharper.*
-# Packages #
 *.7z
 *.dmg
 *.gz

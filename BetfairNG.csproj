@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{50F55410-B461-4639-B286-0F3205413D61}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BetfairNG</RootNamespace>
+    <AssemblyName>BetfairNG</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>packages\Rx-Core.2.2.4\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>packages\Rx-Interfaces.2.2.4\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>packages\Rx-Linq.2.2.4\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>packages\Rx-PlatformServices.2.2.4\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BetfairClient.cs" />
+    <Compile Include="BFHelpers.cs" />
+    <Compile Include="Data\AccountDetailsResponse.cs" />
+    <Compile Include="Data\AccountFundsResponse.cs" />
+    <Compile Include="Data\AccountStatementReport.cs" />
+    <Compile Include="Data\APINGException.cs" />
+    <Compile Include="Data\BetStatus.cs" />
+    <Compile Include="Data\CancelExecutionReport.cs" />
+    <Compile Include="Data\CancelInstruction.cs" />
+    <Compile Include="Data\CancelInstructionReport.cs" />
+    <Compile Include="Data\ClearedOrderSummary.cs" />
+    <Compile Include="Data\ClearedOrderSummaryReport.cs" />
+    <Compile Include="Data\CountryCodeResult.cs" />
+    <Compile Include="Data\CurrentOrderSummary.cs" />
+    <Compile Include="Data\CurrentOrderSummaryReport.cs" />
+    <Compile Include="Data\GroupBy.cs" />
+    <Compile Include="Data\IncludeItem.cs" />
+    <Compile Include="Data\ItemClass.cs" />
+    <Compile Include="Data\ItemDescription.cs" />
+    <Compile Include="Data\OrderBy.cs" />
+    <Compile Include="Data\ReplaceExecutionReport.cs" />
+    <Compile Include="Data\ReplaceInstruction.cs" />
+    <Compile Include="Data\ReplaceInstructionReport.cs" />
+    <Compile Include="Data\RunnerId.cs" />
+    <Compile Include="Data\SortDir.cs" />
+    <Compile Include="Data\StatementItem.cs" />
+    <Compile Include="Data\StatementLegacyData.cs" />
+    <Compile Include="Data\UpdateExecutionReport.cs" />
+    <Compile Include="Data\UpdateInstruction.cs" />
+    <Compile Include="Data\UpdateInstructionReport.cs" />
+    <Compile Include="Data\VenueResult.cs" />
+    <Compile Include="Data\Competition.cs" />
+    <Compile Include="Data\CompetitionResult.cs" />
+    <Compile Include="Data\Event.cs" />
+    <Compile Include="Data\EventResult.cs" />
+    <Compile Include="Data\EventType.cs" />
+    <Compile Include="Data\EventTypeResult.cs" />
+    <Compile Include="Data\ExBestOffersOverrides.cs" />
+    <Compile Include="Data\Exception.cs" />
+    <Compile Include="Data\ExchangePrices.cs" />
+    <Compile Include="Data\ExecutionReportErrorCode.cs" />
+    <Compile Include="Data\ExecutionReportStatus.cs" />
+    <Compile Include="Data\InstructionReportErrorCode.cs" />
+    <Compile Include="Data\InstructionReportStatus.cs" />
+    <Compile Include="Data\LimitOnCloseOrder.cs" />
+    <Compile Include="Data\LimitOrder.cs" />
+    <Compile Include="Data\MarketBettingType.cs" />
+    <Compile Include="Data\MarketBook.cs" />
+    <Compile Include="Data\MarketCatalogue.cs" />
+    <Compile Include="Data\MarketDescription.cs" />
+    <Compile Include="Data\MarketFilter.cs" />
+    <Compile Include="Data\MarketOnCloseOrder.cs" />
+    <Compile Include="Data\MarketProfitAndLoss.cs" />
+    <Compile Include="Data\MarketProjection.cs" />
+    <Compile Include="Data\MarketSort.cs" />
+    <Compile Include="Data\MarketStatus.cs" />
+    <Compile Include="Data\MarketTypeResult.cs" />
+    <Compile Include="Data\Match.cs" />
+    <Compile Include="Data\MatchProjection.cs" />
+    <Compile Include="Data\Order.cs" />
+    <Compile Include="Data\OrderProjection.cs" />
+    <Compile Include="Data\OrderStatus.cs" />
+    <Compile Include="Data\OrderType.cs" />
+    <Compile Include="Data\PersistenceType.cs" />
+    <Compile Include="Data\PlaceExecutionReport.cs" />
+    <Compile Include="Data\PlaceInstruction.cs" />
+    <Compile Include="Data\PlaceInstructionReport.cs" />
+    <Compile Include="Data\PriceData.cs" />
+    <Compile Include="Data\PriceProjection.cs" />
+    <Compile Include="Data\PriceSize.cs" />
+    <Compile Include="Data\RollUpModel.cs" />
+    <Compile Include="Data\Runner.cs" />
+    <Compile Include="Data\RunnerDescription.cs" />
+    <Compile Include="Data\RunnerProfitAndLoss.cs" />
+    <Compile Include="Data\RunnerStatus.cs" />
+    <Compile Include="Data\Side.cs" />
+    <Compile Include="Data\StartingPrices.cs" />
+    <Compile Include="Data\TimeGranularity.cs" />
+    <Compile Include="Data\TimeRange.cs" />
+    <Compile Include="Data\TimeRangeResult.cs" />
+    <Compile Include="Data\Wallet.cs" />
+    <Compile Include="JsonConvert.cs" />
+    <Compile Include="MarketListener.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Network.cs" />
+    <Compile Include="TestAPI.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
