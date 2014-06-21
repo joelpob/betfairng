@@ -19,5 +19,11 @@ namespace BetfairNG.Data
 
         [JsonProperty(PropertyName = "exposureLimit")]
         public double ExposureLimit { get; set; }
+
+        [JsonProperty(PropertyName = "discountRate")]
+        public double DiscountRate { get; set; }
+
+        [JsonProperty(PropertyName = "pointsBalance")]
+        public double PointsBalance { get; set; }
     }
 }

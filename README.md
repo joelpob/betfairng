@@ -40,6 +40,9 @@ var marketSubscription = marketListener.SubscribeMarketBook(marketCatalogue.Mark
         Console.WriteLine("Market finished");
         waitHandle.Set();
     });
+
+waitHandle.WaitOne();
+marketSubscription.Dispose();
 ```
 
 MarketListener will poll the Betfair API-NG service (ListMarketBook) for all subscribed markets and push the result to all Rx subscribers. You can also subscribe to individual runners in a given market (MarketListener.SubscribeRunner()).

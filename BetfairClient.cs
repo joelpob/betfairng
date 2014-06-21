@@ -41,6 +41,7 @@ namespace BetfairNG
         private static readonly string GET_ACCOUNT_DETAILS = "AccountAPING/v1.0/getAccountDetails";
         private static readonly string GET_ACCOUNT_FUNDS = "AccountAPING/v1.0/getAccountFunds";
         private static readonly string GET_ACCOUNT_STATEMENT = "AccountAPING/v1.0/getAccountStatement";
+        private static readonly string LIST_CURRENCY_RATES = "AccountAPING/v1.0/listCurrencyRates";
 
         private static readonly string FILTER = "filter";
         private static readonly string BET_IDS = "betIds";
@@ -72,6 +73,7 @@ namespace BetfairNG
         private static readonly string INCLUDE_BSP_BETS = "includeBspBets";
         private static readonly string INCLUDE_ITEM_DESCRIPTION = "includeItemDescription";
         private static readonly string NET_OF_COMMISSION = "netOfCommission";
+        private static readonly string FROM_CURRENCY = "fromCurrency";
 
         public BetfairClient(Exchange exchange, string appKey, Action preNetworkRequest = null)
         {
@@ -360,6 +362,13 @@ namespace BetfairNG
         {
             var args = new Dictionary<string, object>();
             return networkClient.Invoke<AccountStatementReport>(exchange, Endpoint.Account, GET_ACCOUNT_STATEMENT, args);
+        }
+
+        public Task<BetfairServerResponse<List<CurrencyRate>>> ListCurrencyRates(string fromCurrency)
+        {
+            var args = new Dictionary<string, object>();
+            args[FROM_CURRENCY] = fromCurrency;
+            return networkClient.Invoke<List<CurrencyRate>>(exchange, Endpoint.Account, LIST_CURRENCY_RATES, args);
         }
     }
 

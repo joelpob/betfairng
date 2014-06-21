@@ -67,6 +67,7 @@
     <Compile Include="Data\ClearedOrderSummary.cs" />
     <Compile Include="Data\ClearedOrderSummaryReport.cs" />
     <Compile Include="Data\CountryCodeResult.cs" />
+    <Compile Include="Data\CurrencyRate.cs" />
     <Compile Include="Data\CurrentOrderSummary.cs" />
     <Compile Include="Data\CurrentOrderSummaryReport.cs" />
     <Compile Include="Data\GroupBy.cs" />

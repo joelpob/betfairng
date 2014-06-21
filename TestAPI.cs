@@ -18,6 +18,8 @@ public class TestAPI
         BetfairClient client = new BetfairClient(Exchange.AUS, "QWERASDF1234");
         client.Login("client-2048.p12", "certpassword", "username", "password");
 
+        var currencyRates = client.ListCurrencyRates("GBP").Result;
+
         var marketFilter = new MarketFilter();
         marketFilter.EventTypeIds = new HashSet<string>() { "7" };
         marketFilter.MarketStartTime = new TimeRange()
