@@ -20,6 +20,7 @@ namespace BetfairNG
         private string appKey;
         private string sessionToken;
         private Action preNetworkRequest;
+        private WebProxy proxy;
         private static TraceSource trace = new TraceSource("BetfairClient");
 
         private static readonly string LIST_COMPETITIONS_METHOD = "SportsAPING/v1.0/listCompetitions";
@@ -75,16 +76,22 @@ namespace BetfairNG
         private static readonly string NET_OF_COMMISSION = "netOfCommission";
         private static readonly string FROM_CURRENCY = "fromCurrency";
 
-        public BetfairClient(Exchange exchange, string appKey, Action preNetworkRequest = null)
+        public BetfairClient(Exchange exchange, string appKey, Action preNetworkRequest = null, WebProxy proxy = null)
         {
             if (string.IsNullOrWhiteSpace(appKey)) throw new ArgumentException("appKey");
 
             this.exchange = exchange;
             this.appKey = appKey;
             this.preNetworkRequest = preNetworkRequest;
+            this.proxy = proxy;
         }
 
-        public BetfairClient(Exchange exchange, string appKey, string sessionToken, Action preNetworkRequest = null)
+        public BetfairClient(
+            Exchange exchange, 
+            string appKey, 
+            string sessionToken, 
+            Action preNetworkRequest = null,
+            WebProxy proxy = null)
         {
             if (string.IsNullOrWhiteSpace(appKey)) throw new ArgumentException("appKey");
             if (string.IsNullOrWhiteSpace(sessionToken)) throw new ArgumentException("sessionToken");
@@ -93,7 +100,8 @@ namespace BetfairNG
             this.appKey = appKey;
             this.sessionToken = sessionToken;
             this.preNetworkRequest = preNetworkRequest;
-            this.networkClient = new Network(this.appKey, this.sessionToken, this.preNetworkRequest);
+            this.proxy = proxy;
+            this.networkClient = new Network(this.appKey, this.sessionToken, this.preNetworkRequest, true, this.proxy);
         }
         
         public bool Login(string p12CertificateLocation, string p12CertificatePassword, string username, string password)
@@ -102,6 +110,7 @@ namespace BetfairNG
             if (string.IsNullOrWhiteSpace(p12CertificatePassword)) throw new ArgumentException("p12CertificatePassword");
             if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+            if (!File.Exists(p12CertificateLocation)) throw new ArgumentException("p12CertificateLocation not found");
 
             if (preNetworkRequest != null)
                 preNetworkRequest();
@@ -115,7 +124,9 @@ namespace BetfairNG
             request.Headers.Add("X-Application", appKey);
             request.ClientCertificates.Add(x509certificate);
             request.Accept = "*/*";
-            request.Proxy = null;
+            if (this.proxy != null)
+                request.Proxy = this.proxy;
+
             using (Stream stream = request.GetRequestStream())
             using (StreamWriter writer = new StreamWriter(stream, Encoding.Default))
             {

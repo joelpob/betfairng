@@ -22,6 +22,7 @@ namespace BetfairNG
         public int RetryCount { get; set; }
         public bool GZipCompress { get; set; }
         public Action PreRequestAction { get; set; }
+        public WebProxy Proxy { get; set; }
 
         private static object lockObj = new object();
         public static TraceSource TraceSource = new TraceSource("BetfairNG.Network");
@@ -29,7 +30,12 @@ namespace BetfairNG
         public Network() : this(null, null)
         { }
 
-        public Network(string appKey, string sessionToken, Action preRequestAction = null, bool gzipCompress = true)
+        public Network(
+            string appKey, 
+            string sessionToken, 
+            Action preRequestAction = null, 
+            bool gzipCompress = true,
+            WebProxy proxy = null)
         {
             this.Host = string.Empty;
             this.UserAgent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)";
@@ -38,6 +44,7 @@ namespace BetfairNG
             this.SessionToken = sessionToken;
             this.GZipCompress = gzipCompress;
             this.PreRequestAction = preRequestAction;
+            this.Proxy = proxy;
         }
 
         public Task<BetfairServerResponse<T>> Invoke<T>(
@@ -119,6 +126,8 @@ namespace BetfairNG
             request.AllowAutoRedirect = true;
             request.ContentLength = postData.Length;
             request.KeepAlive = true;
+            if (this.Proxy != null)
+                request.Proxy = this.Proxy;
 
             if (this.GZipCompress)
                 request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
