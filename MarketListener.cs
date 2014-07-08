@@ -143,8 +143,7 @@ namespace BetfairNG
                                         {
                                             // check to see if the market is finished
                                             if (market.Status == MarketStatus.CLOSED || 
-                                                market.Status == MarketStatus.INACTIVE ||
-                                                market.Status == MarketStatus.SUSPENDED)
+                                                market.Status == MarketStatus.INACTIVE)
                                                 o.OnCompleted();
                                             else
                                                 o.OnNext(market);
