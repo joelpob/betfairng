@@ -43,6 +43,7 @@ namespace BetfairNG
         private static readonly string GET_ACCOUNT_FUNDS = "AccountAPING/v1.0/getAccountFunds";
         private static readonly string GET_ACCOUNT_STATEMENT = "AccountAPING/v1.0/getAccountStatement";
         private static readonly string LIST_CURRENCY_RATES = "AccountAPING/v1.0/listCurrencyRates";
+        private static readonly string TRANSFER_FUNDS = "AccountAPING/v1.0/transferFunds";
 
         private static readonly string FILTER = "filter";
         private static readonly string BET_IDS = "betIds";
@@ -75,6 +76,10 @@ namespace BetfairNG
         private static readonly string INCLUDE_ITEM_DESCRIPTION = "includeItemDescription";
         private static readonly string NET_OF_COMMISSION = "netOfCommission";
         private static readonly string FROM_CURRENCY = "fromCurrency";
+        private static readonly string FROM = "from";
+        private static readonly string TO = "to";
+        private static readonly string AMOUNT = "amount";
+        private static readonly string WALLET = "wallet";
 
         public BetfairClient(Exchange exchange, string appKey, Action preNetworkRequest = null, WebProxy proxy = null)
         {
@@ -358,9 +363,10 @@ namespace BetfairNG
             return networkClient.Invoke<AccountDetailsResponse>(exchange, Endpoint.Account, GET_ACCOUNT_DETAILS, args);
         }
 
-        public Task<BetfairServerResponse<AccountFundsResponse>> GetAccountFunds()
+        public Task<BetfairServerResponse<AccountFundsResponse>> GetAccountFunds(Wallet wallet)
         {
             var args = new Dictionary<string, object>();
+            args[WALLET] = wallet;
             return networkClient.Invoke<AccountFundsResponse>(exchange, Endpoint.Account, GET_ACCOUNT_FUNDS, args);
         }
 
@@ -380,6 +386,15 @@ namespace BetfairNG
             var args = new Dictionary<string, object>();
             args[FROM_CURRENCY] = fromCurrency;
             return networkClient.Invoke<List<CurrencyRate>>(exchange, Endpoint.Account, LIST_CURRENCY_RATES, args);
+        }
+
+        public Task<BetfairServerResponse<TransferResponse>> TransferFunds(Wallet from, Wallet to, double amount)
+        {
+            var args = new Dictionary<string, object>();
+            args[FROM] = from;
+            args[TO] = to;
+            args[AMOUNT] = amount;
+            return networkClient.Invoke<TransferResponse>(exchange, Endpoint.Account, TRANSFER_FUNDS, args);
         }
     }
 
