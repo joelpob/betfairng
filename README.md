@@ -12,7 +12,7 @@ BetfairClient client = new BetfairClient(Exchange.AUS, "ASDF1234qwerty");
 client.Login("client-2048.p12", "certpass", "username", "password");
 ```
 
-Check out the "TestAPI.cs" file for examples on how to use the "BetfairClient" class.
+Check out the ConsoleExample project (in the solution) for an example on how to use the "BetfairClient" class. 
 
 The "MarketListener" class is where the magic happens:
 
