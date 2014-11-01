@@ -104,7 +104,7 @@ namespace BetfairNG
             return r;
         }
 
-        private async Task<string> Request(
+        private Task<string> Request(
             string url, 
             string requestPostData,
             string appKey,
@@ -159,7 +159,7 @@ namespace BetfairNG
                         return task.ContinueWith(t => GetResponseHtml((HttpWebResponse)t.Result));
                     }).Unwrap();
 
-            return await continuation;
+            return continuation;
         }
 
         private string GetResponseHtml(HttpWebResponse response)
