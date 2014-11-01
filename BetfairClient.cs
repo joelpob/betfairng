@@ -13,6 +13,9 @@ using Newtonsoft.Json.Linq;
 
 namespace BetfairNG
 {
+    /// <summary>
+    /// Task Parallel Library version of BetfairClient API. 
+    /// </summary>
     public class BetfairClient
     {
         private Exchange exchange;

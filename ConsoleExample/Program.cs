@@ -24,6 +24,7 @@ public class ConsoleExample
         BetfairClient client = new BetfairClient(Exchange.UK, "APPKEY");
         client.Login(@"client-2048.p12", "certpass", "username", "password");
 
+        // find all the upcoming UK horse races (EventTypeId 7)
         var marketFilter = new MarketFilter();
         marketFilter.EventTypeIds = new HashSet<string>() { "7" };
         marketFilter.MarketStartTime = new TimeRange()

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BetfairClient.cs" />
+    <Compile Include="BetfairClientSync.cs" />
     <Compile Include="BFHelpers.cs" />
     <Compile Include="Data\AccountDetailsResponse.cs" />
     <Compile Include="Data\AccountFundsResponse.cs" />
