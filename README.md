@@ -12,8 +12,8 @@ BetfairClient client = new BetfairClient(Exchange.AUS, "ASDF1234qwerty");
 client.Login("client-2048.p12", "certpass", "username", "password");
 ```
 
-Check out the ConsoleExample project (in the solution) for an example on how to use the "BetfairClient" class. 
-
+Check out the ConsoleExample project (in the solution) for an example on how to use the "BetfairClient" class. If you're unfamiliar with the Task Parallel Library or Reactive Extensions, you can use the "BetfairClientSync" class. 
+ 
 The "MarketListener" class is where the magic happens:
 
 ```c#
