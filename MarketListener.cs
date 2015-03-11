@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Linq;
-using BetfairNG.Data;
-using System.Reactive.Disposables;
 using System.Collections.Concurrent;
+using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using BetfairNG.Data;
+using MoreLinq;
 
 namespace BetfairNG
 {
@@ -119,41 +117,46 @@ namespace BetfairNG
 
                                 lock (lockObj)
                                     lastRequestStart = DateTime.Now;
+                                                                
+                                var books = client.ListMarketBook(markets.Keys.ToList(), this.priceProjection).Result;
+                                var bookInError = books.FirstOrDefault(b => b.HasError);
 
-                                var book = client.ListMarketBook(markets.Keys.ToList(), this.priceProjection).Result;
-
-                                if (!book.HasError)
+                                if (bookInError == null)
                                 {
                                     // we may have fresher data than the response to this request
-                                    if (book.RequestStart < latestDataRequestStart && book.LastByte > latestDataRequestFinish)
+                                    if (books.Any(b => b.RequestStart < latestDataRequestStart && b.LastByte > latestDataRequestFinish))
                                         continue;
                                     else
                                     {
                                         lock (lockObj)
                                         {
-                                            latestDataRequestStart = book.RequestStart;
-                                            latestDataRequestFinish = book.LastByte;
+                                            var latestBook = books.MinBy(b => b.RequestStart);
+                                            latestDataRequestStart = latestBook.RequestStart;
+                                            latestDataRequestFinish = latestBook.LastByte;
                                         }
                                     }
-
-                                    foreach (var market in book.Response)
+                                    foreach (var book in books)
                                     {
-                                        IObserver<MarketBook> o;
-                                        if (observers.TryGetValue(market.MarketId, out o))
+                                        foreach (var market in book.Response)
                                         {
-                                            // check to see if the market is finished
-                                            if (market.Status == MarketStatus.CLOSED || 
-                                                market.Status == MarketStatus.INACTIVE)
-                                                o.OnCompleted();
-                                            else
-                                                o.OnNext(market);
+                                            IObserver<MarketBook> o;
+                                            if (observers.TryGetValue(market.MarketId, out o))
+                                            {
+                                                // check to see if the market is finished
+                                                if (market.Status == MarketStatus.CLOSED ||
+                                                    market.Status == MarketStatus.INACTIVE ||
+                                                    market.Status == MarketStatus.SUSPENDED)
+                                                    o.OnCompleted();
+                                                else
+                                                    o.OnNext(market);
+                                            }
                                         }
                                     }
                                 }
                                 else
                                 {
                                     foreach (var observer in observers)
-                                        observer.Value.OnError(book.Error);
+                                        observer.Value.OnError(books.First(x => x.HasError).Error);
                                 }
                             }
                             else
