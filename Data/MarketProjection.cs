@@ -15,6 +15,7 @@ namespace BetfairNG.Data
         EVENT_TYPE, 
         MARKET_DESCRIPTION, 
         RUNNER_DESCRIPTION, 
-        RUNNER_METADATA 
+        RUNNER_METADATA,
+        MARKET_START_TIME
     }
 }

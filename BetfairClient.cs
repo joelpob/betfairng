@@ -157,6 +157,29 @@ namespace BetfairNG
             }
         }
 
+        /// <summary>
+        /// Send a 'KeepAlive' request to prevent the current API session from timing out
+        /// </summary>
+        public bool KeepAlive()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://identitysso.betfair.com/api/keepAlive");
+            request.UseDefaultCredentials = true;
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Headers.Add("X-Application", appKey);
+            request.Headers.Add("X-Authentication", sessionToken);
+            request.Accept = "application/json";
+            if (this.proxy != null)
+                request.Proxy = this.proxy;
+
+            using (Stream stream = ((HttpWebResponse)request.GetResponse()).GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream, Encoding.Default))
+            {
+                var jsonResponse = JsonConvert.Deserialize<KeepAliveResponse>(reader.ReadToEnd());
+                return string.Equals(jsonResponse.Status, "SUCCESS", StringComparison.Ordinal);
+            }
+        }
+
         public Task<BetfairServerResponse<List<CompetitionResult>>> ListCompetitions(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
@@ -240,18 +263,56 @@ namespace BetfairNG
             return networkClient.Invoke<List<EventTypeResult>>(exchange, Endpoint.Betting, LIST_EVENT_TYPES_METHOD, args);
         }
 
-        public Task<BetfairServerResponse<List<MarketBook>>> ListMarketBook(
+        public Task<BetfairServerResponse<List<MarketBook>>[]> ListMarketBook(
             IEnumerable<string> marketIds,
             PriceProjection priceProjection = null,
             OrderProjection? orderProjection = null,
             MatchProjection? matchProjection = null)
         {
-            var args = new Dictionary<string, object>();
-            args[MARKET_IDS] = marketIds;
-            args[PRICE_PROJECTION] = priceProjection;
-            args[ORDER_PROJECTION] = orderProjection;
-            args[MATCH_PROJECTION] = matchProjection;
-            return networkClient.Invoke<List<MarketBook>>(exchange, Endpoint.Betting, LIST_MARKET_BOOK_METHOD, args);
+            if (marketIds.Count() == 0)
+                return Task.FromResult(new BetfairServerResponse<List<MarketBook>>[0]);
+
+            // BF API limits/throttles calls with different weighting per call type
+            // so batch up the calls by their weight and run them in batches
+            int sumWeight = 0;
+            if (priceProjection.PriceData.Contains(PriceData.SP_AVAILABLE)) sumWeight += 3;
+            if (priceProjection.PriceData.Contains(PriceData.SP_TRADED)) sumWeight += 7;
+            if (priceProjection.PriceData.Contains(PriceData.EX_BEST_OFFERS)) sumWeight += 5;
+            if (priceProjection.PriceData.Contains(PriceData.EX_ALL_OFFERS)) sumWeight += 17;
+            if (priceProjection.PriceData.Contains(PriceData.EX_TRADED)) sumWeight += 17;
+
+            var reqWeight = sumWeight * marketIds.Count();
+            var batchCount = Convert.ToInt32(Math.Ceiling((double)reqWeight / 200.0));
+            var batches = new List<Dictionary<string, object>>();
+            var maxBatchSize = Convert.ToInt32(marketIds.Count() / batchCount);
+            var markets = marketIds.ToList();
+
+            for (int i = 0; i < batchCount; i++)
+            {
+                var args = new Dictionary<string, object>();
+                List<string> splitMarketIds = new List<string>();
+
+                if (i == batchCount - 1) //last loop - take remainder
+                {
+                    splitMarketIds.AddRange(markets.Skip((i * maxBatchSize)-1).Take(markets.Count() - i * maxBatchSize));
+                }
+                else
+                {
+                    for (int j = 0; j < maxBatchSize; j++)
+                    {
+                        splitMarketIds.Add(markets[(i * maxBatchSize) + j]);
+                    }
+                }
+
+                args[MARKET_IDS] = splitMarketIds.ToList();
+                args[PRICE_PROJECTION] = priceProjection;
+                args[ORDER_PROJECTION] = orderProjection;
+                args[MATCH_PROJECTION] = matchProjection;
+
+                batches.Add(args);
+            }
+            var batchTasks = batches.Select(b => networkClient.Invoke<List<MarketBook>>(exchange, Endpoint.Betting, LIST_MARKET_BOOK_METHOD, b));
+            return Task.WhenAll(batchTasks);
         }
 
         public Task<BetfairServerResponse<List<MarketCatalogue>>> ListMarketCatalogue(
@@ -420,6 +481,21 @@ namespace BetfairNG
 
         [JsonProperty(PropertyName = "loginStatus")]
         public string LoginStatus { get; set; }
+    }
+
+    public class KeepAliveResponse
+    {
+        [JsonProperty(PropertyName = "token")]
+        public string SessionToken { get; set; }
+
+        [JsonProperty(PropertyName = "product")]
+        public string Product { get; set; }
+
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        [JsonProperty(PropertyName = "error")]
+        public string Error { get; set; }
     }
 
     public class BetfairServerResponse<T>
