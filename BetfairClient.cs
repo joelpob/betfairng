@@ -157,6 +157,11 @@ namespace BetfairNG
             }
         }
 
+        public BetfairServerResponse<KeepAliveResponse> KeepAlive()
+        {
+            return networkClient.KeepAliveSynchronous();
+        }
+
         public Task<BetfairServerResponse<List<CompetitionResult>>> ListCompetitions(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
@@ -420,6 +425,21 @@ namespace BetfairNG
 
         [JsonProperty(PropertyName = "loginStatus")]
         public string LoginStatus { get; set; }
+    }
+
+    public class KeepAliveResponse
+    {
+        [JsonProperty(PropertyName = "token")]
+        public string SessionToken { get; set; }
+        
+        [JsonProperty(PropertyName = "product")]
+        public string Product { get; set; }
+
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
+
+        [JsonProperty(PropertyName = "error")]
+        public string Error { get; set; }
     }
 
     public class BetfairServerResponse<T>

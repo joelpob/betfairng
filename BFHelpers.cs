@@ -99,8 +99,8 @@ namespace BetfairNG
                 .Where(c => c.Status == RunnerStatus.ACTIVE)
                 .Select(c => c.ExchangePrices.AvailableToLay.Count > 0 ? c.ExchangePrices.AvailableToLay.First().Price : 0.0);
 
-            var timeToJump = marketCatalogue.Description.MarketTime;
-            var timeRemainingToJump = timeToJump.Subtract(DateTime.Now.AddHours(7));
+            var timeToJump = Convert.ToDateTime(marketCatalogue.Event.OpenDate);
+            var timeRemainingToJump = timeToJump.Subtract(DateTime.UtcNow);
 
             var sb = new StringBuilder()
                         .AppendFormat("{0} {1}", marketCatalogue.Event.Name, marketCatalogue.MarketName)
@@ -112,7 +112,7 @@ namespace BetfairNG
                         .AppendFormat(" : Avail={0}", marketBook.TotalAvailable.ToString("C0"));
             sb.AppendLine();
             sb.AppendFormat("Time To Jump: {0}h {1}:{2}",
-                  timeRemainingToJump.Hours,
+                  timeRemainingToJump.Hours + (timeRemainingToJump.Days * 24),
                   timeRemainingToJump.Minutes.ToString("##"),
                   timeRemainingToJump.Seconds.ToString("##"));
             sb.AppendLine();
@@ -127,7 +127,7 @@ namespace BetfairNG
 
                     string consoleRunnerName = runnerName != null ? runnerName.RunnerName : "null";
 
-                    sb.AppendLine(string.Format("{0}\t {9} [{1}] {2},{3},{4}  ::  {5},{6},{7} [{8}] {10}",
+                    sb.AppendLine(string.Format("{0} {9} [{1}] {2},{3},{4}  ::  {5},{6},{7} [{8}] {10}",
                         consoleRunnerName.PadRight(25),
                         runner.ExchangePrices.AvailableToBack.Sum(a => a.Size).ToString("0").PadLeft(7),
                         runner.ExchangePrices.AvailableToBack.Count > 2 ? runner.ExchangePrices.AvailableToBack[2].Price.ToString("0.00").PadLeft(6) : "  0.00",
@@ -255,7 +255,6 @@ namespace BetfairNG
                 return price;
 
             int index = 0;
-            // 9.9 (not valid)
             for (int i = 0; i < Table.Length; i++)
             {
                 if (Table[i] > price)
@@ -273,7 +272,6 @@ namespace BetfairNG
                 return price;
 
             int index = 0;
-            // 9.9 (not valid)
             for (int i = 0; i < Table.Length; i++)
             {
                 if (Table[i] > price)

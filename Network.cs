@@ -47,6 +47,39 @@ namespace BetfairNG
             this.Proxy = proxy;
         }
 
+        public BetfairServerResponse<KeepAliveResponse> KeepAliveSynchronous()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://identitysso.betfair.com/api/keepAlive");
+            request.UseDefaultCredentials = true;
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Headers.Add("X-Application", this.AppKey);
+            request.Headers.Add("X-Authentication", this.SessionToken);
+            request.Accept = "application/json";
+            if (this.Proxy != null)
+                request.Proxy = this.Proxy;
+
+            TraceSource.TraceInformation("KeepAlive");
+            DateTime requestStart = DateTime.Now;
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            using (Stream stream = ((HttpWebResponse)request.GetResponse()).GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream, Encoding.Default))
+            {
+                var lastByte = DateTime.Now;
+                var response = JsonConvert.Deserialize<KeepAliveResponse>(reader.ReadToEnd());
+                watch.Stop();
+                TraceSource.TraceInformation("KeepAlive finish: {0}ms", watch.ElapsedMilliseconds);
+                BetfairServerResponse<KeepAliveResponse> r = new BetfairServerResponse<KeepAliveResponse>();
+                r.HasError = !string.IsNullOrWhiteSpace(response.Error);
+                r.Response = response;
+                r.LastByte = lastByte;
+                r.RequestStart = requestStart;
+                return r;
+            }
+        }
+
         public Task<BetfairServerResponse<T>> Invoke<T>(
             Exchange exchange, 
             Endpoint endpoint, 
@@ -74,7 +107,7 @@ namespace BetfairNG
             var call = new JsonRequest { Method = method, Id = 1, Params = args };
             var requestData = JsonConvert.Serialize(call);
 
-            var response = Request(url, requestData, this.AppKey, this.SessionToken);
+            var response = Request(url, requestData, "application/json-rpc", this.AppKey, this.SessionToken);
 
             var result = response.ContinueWith(c =>
                 {
@@ -107,6 +140,7 @@ namespace BetfairNG
         private Task<string> Request(
             string url, 
             string requestPostData,
+            string contentType,
             string appKey,
             string sessionToken)
         {
@@ -117,7 +151,7 @@ namespace BetfairNG
 
             var postData = Encoding.UTF8.GetBytes(requestPostData);
             request.Method = "POST";
-            request.ContentType = "application/json-rpc";
+            request.ContentType = contentType;
             if (!string.IsNullOrWhiteSpace(appKey)) 
                 request.Headers.Add("X-Application", appKey);
             if (!string.IsNullOrWhiteSpace(sessionToken))

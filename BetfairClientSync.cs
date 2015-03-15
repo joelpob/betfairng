@@ -37,6 +37,11 @@ namespace BetfairNG
             return client.Login(p12CertificateLocation, p12CertificatePassword, username, password);
         }
 
+        public BetfairServerResponse<KeepAliveResponse> KeepAlive()
+        {
+            return client.KeepAlive();
+        }
+
         public BetfairServerResponse<List<CompetitionResult>> ListCompetitions(MarketFilter marketFilter)
         {
             return client.ListCompetitions(marketFilter).Result;

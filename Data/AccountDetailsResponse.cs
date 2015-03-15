@@ -31,5 +31,8 @@ namespace BetfairNG.Data
 
         [JsonProperty(PropertyName = "pointsBalance")]
         public int PointsBalance { get; set; }
+
+        [JsonProperty(PropertyName = "countryCode")]
+        public string CountryCode { get; set; }
     }
 }
