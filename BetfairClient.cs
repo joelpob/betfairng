@@ -166,14 +166,14 @@ namespace BetfairNG
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<CompetitionResult>>(exchange, Endpoint.Betting, LIST_COUNTRIES_METHOD, args);
+            return networkClient.Invoke<List<CompetitionResult>>(exchange, Endpoint.Betting, LIST_COMPETITIONS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<CountryCodeResult>>> ListCountries(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<CountryCodeResult>>(exchange, Endpoint.Betting, LIST_COMPETITIONS_METHOD, args);
+            return networkClient.Invoke<List<CountryCodeResult>>(exchange, Endpoint.Betting, LIST_COUNTRIES_METHOD, args);
         }
 
         public Task<BetfairServerResponse<CurrentOrderSummaryReport>> ListCurrentOrders(
