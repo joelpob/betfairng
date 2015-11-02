@@ -18,6 +18,9 @@ namespace BetfairNG.Data
         [JsonProperty(PropertyName = "marketDesc")]
         public string MarketDesc { get; set; }
 
+        [JsonProperty(PropertyName = "marketType")]
+        public string MarketType { get; set; }
+
         [JsonProperty(PropertyName = "marketStartTime")]
         public DateTime MarketStartTime { get; set; }
 
@@ -26,5 +29,8 @@ namespace BetfairNG.Data
 
         [JsonProperty(PropertyName = "numberOfWinners")]
         public int NumberOfWinners { get; set; }
+
+        [JsonProperty(PropertyName = "eachWayDivisor")]
+        public double EachWayDivisor { get; set; }
     }
 }

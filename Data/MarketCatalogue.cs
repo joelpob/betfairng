@@ -14,12 +14,18 @@ namespace BetfairNG.Data
         [JsonProperty(PropertyName = "marketName")]
         public string MarketName { get; set; }
 
+        [JsonProperty(PropertyName = "marketStartTime")]
+        public DateTime MarketStartTime { get; set; }
+
         [JsonProperty(PropertyName = "isMarketDataDelayed")]
         public bool IsMarketDataDelayed { get; set; }
 
         [JsonProperty(PropertyName = "description")]
         public MarketDescription Description { get; set; }
 
+        [JsonProperty(PropertyName = "totalMatched")]
+        public double TotalMatched { get; set; }
+        
         [JsonProperty(PropertyName = "runners")]
         public List<RunnerDescription> Runners { get; set; }
 

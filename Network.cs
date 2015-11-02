@@ -45,6 +45,8 @@ namespace BetfairNG
             this.GZipCompress = gzipCompress;
             this.PreRequestAction = preRequestAction;
             this.Proxy = proxy;
+            // as per http://forum.bdp.betfair.com/showthread.php?t=2900
+            System.Net.ServicePointManager.Expect100Continue = false; 
         }
 
         public BetfairServerResponse<KeepAliveResponse> KeepAliveSynchronous()

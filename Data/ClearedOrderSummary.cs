@@ -42,11 +42,17 @@ namespace BetfairNG.Data
         [JsonProperty(PropertyName = "itemDescription")]
         public ItemDescription ItemDescription { get; set; }
 
+        [JsonProperty(PropertyName = "betOutcome")]
+        public string BetOutcome { get; set; }
+
         [JsonProperty(PropertyName = "priceRequested")]
         public double Price { get; set; }
 
         [JsonProperty(PropertyName = "settledDate")]
         public DateTime SettledDate { get; set; }
+        
+        [JsonProperty(PropertyName = "lastMatchedDate")]
+        public DateTime LastMatchedDate { get; set; }
 
         [JsonProperty(PropertyName = "betCount")]
         public int BetCount { get; set; }
