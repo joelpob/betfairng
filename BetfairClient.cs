@@ -31,6 +31,7 @@ namespace BetfairNG
         private static readonly string LIST_CURRENT_ORDERS_METHOD = "SportsAPING/v1.0/listCurrentOrders";
         private static readonly string LIST_CLEARED_ORDERS_METHOD = "SportsAPING/v1.0/listClearedOrders";
         private static readonly string LIST_EVENT_TYPES_METHOD = "SportsAPING/v1.0/listEventTypes";
+        private static readonly string LIST_EVENTS_METHOD = "SportsAPING/v1.0/listEvents";
         private static readonly string LIST_MARKET_CATALOGUE_METHOD = "SportsAPING/v1.0/listMarketCatalogue";
         private static readonly string LIST_MARKET_BOOK_METHOD = "SportsAPING/v1.0/listMarketBook";
         private static readonly string LIST_MARKET_PROFIT_AND_LOSS = "SportsAPING/v1.0/listMarketProfitAndLoss";
@@ -235,7 +236,7 @@ namespace BetfairNG
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<EventResult>>(exchange, Endpoint.Betting, LIST_EVENT_TYPES_METHOD, args);
+            return networkClient.Invoke<List<EventResult>>(exchange, Endpoint.Betting, LIST_EVENTS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<EventTypeResult>>> ListEventTypes(MarketFilter marketFilter)
