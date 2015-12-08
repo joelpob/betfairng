@@ -11,10 +11,6 @@ namespace BetfairNG.Data
         [JsonProperty(PropertyName = "event")]
         public Event Event { get; set; }
 
-        // documentation says one thing, api result says another
-        [JsonProperty(PropertyName = "eventType")]
-        public EventType EventType { get; set; }
-
         [JsonProperty(PropertyName = "marketCount")]
         public int MarketCount { get; set; }
 
