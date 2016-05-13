@@ -16,6 +16,7 @@ namespace BetfairNG
     {
         private static MarketListener listener = null;
         private int connectionCount;
+        private int samplePeriod;
         private PriceProjection priceProjection;        
         private BetfairClient client;
         private static DateTime lastRequestStart;
@@ -33,17 +34,18 @@ namespace BetfairNG
 
         private MarketListener(BetfairClient client, 
             PriceProjection priceProjection, 
-            int connectionCount)
+            int connectionCount, int samplePeriod = 0)
         {
             this.client = client;
             this.priceProjection = priceProjection;
             this.connectionCount = connectionCount;
+            this.samplePeriod = samplePeriod;
             Task.Run(() => PollMarketBooks());
         }
 
         public static MarketListener Create(BetfairClient client, 
             PriceProjection priceProjection, 
-            int connectionCount)
+            int connectionCount, int samplePeriod = 0)
         {
             if (listener == null)
                 listener = new MarketListener(client, priceProjection, connectionCount);
@@ -104,7 +106,7 @@ namespace BetfairNG
         {
             for (int i = 0; i < connectionCount;i++)
             {
-                Task.Run(() =>
+                Task.Run(async () =>
                     {
                         while (true)
                         {
@@ -142,7 +144,7 @@ namespace BetfairNG
                                         if (observers.TryGetValue(market.MarketId, out o))
                                         {
                                             // check to see if the market is finished
-                                            if (market.Status == MarketStatus.CLOSED || 
+                                            if (market.Status == MarketStatus.CLOSED ||
                                                 market.Status == MarketStatus.INACTIVE)
                                                 o.OnCompleted();
                                             else
@@ -159,6 +161,8 @@ namespace BetfairNG
                             else
                                 // TODO:// will die with rx scheduler
                                 Thread.Sleep(500);
+                            if (samplePeriod > 0)
+                                await Task.Delay(samplePeriod);
                         }
                     });
                 Thread.Sleep(1000 / connectionCount);

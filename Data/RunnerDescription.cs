@@ -17,6 +17,9 @@ namespace BetfairNG.Data
         [JsonProperty(PropertyName = "handicap")]
         public double Handicap { get; set; }
 
+        [JsonProperty(PropertyName = "sortPriority")]
+        public int SortPriority { get; set; }
+
         [JsonProperty(PropertyName = "metadata")]
         public Dictionary<string, string> Metadata { get; set; }
 
