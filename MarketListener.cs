@@ -34,7 +34,7 @@ namespace BetfairNG
 
         private MarketListener(BetfairClient client, 
             PriceProjection priceProjection, 
-            int connectionCount, int samplePeriod = 0)
+            int connectionCount, int samplePeriod)
         {
             this.client = client;
             this.priceProjection = priceProjection;
@@ -48,7 +48,7 @@ namespace BetfairNG
             int connectionCount, int samplePeriod = 0)
         {
             if (listener == null)
-                listener = new MarketListener(client, priceProjection, connectionCount);
+                listener = new MarketListener(client, priceProjection, connectionCount, samplePeriod);
 
             return listener;
         }
