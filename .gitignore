@@ -33,3 +33,4 @@ Icon?
 Thumbs.db
 packages/
 *.vspscc
+/ConsoleExample/client-2048.p12

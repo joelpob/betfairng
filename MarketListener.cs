@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Linq;
 using BetfairNG.Data;
 using System.Reactive.Disposables;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 
 namespace BetfairNG
@@ -17,6 +15,8 @@ namespace BetfairNG
         private static MarketListener listener = null;
         private int connectionCount;
         private int samplePeriod;
+        private int sampleFrequency;
+        private bool marketAdded = false;
         private PriceProjection priceProjection;        
         private BetfairClient client;
         private static DateTime lastRequestStart;
@@ -40,6 +40,10 @@ namespace BetfairNG
             this.priceProjection = priceProjection;
             this.connectionCount = connectionCount;
             this.samplePeriod = samplePeriod;
+            if (samplePeriod >= 1000)
+                this.sampleFrequency = samplePeriod/1000;
+            else
+                this.sampleFrequency = samplePeriod/100;
             Task.Run(() => PollMarketBooks());
         }
 
@@ -83,21 +87,22 @@ namespace BetfairNG
                 return market;
 
             var observable = Observable.Create<MarketBook>(
-               (IObserver<MarketBook> observer) =>
-               {
-                   observers.AddOrUpdate(marketId, observer, (key, existingVal) => existingVal);
-                   return Disposable.Create(() =>
-                       {
-                           IObserver<MarketBook> ob;
-                           IObservable<MarketBook> o;
-                           markets.TryRemove(marketId, out o);
-                           observers.TryRemove(marketId, out ob);
-                       });
-               })
-               .Publish()
-               .RefCount();
+                (IObserver<MarketBook> observer) =>
+                {
+                    observers.AddOrUpdate(marketId, observer, (key, existingVal) => existingVal);
+                    return Disposable.Create(() =>
+                    {
+                        IObserver<MarketBook> ob;
+                        IObservable<MarketBook> o;
+                        markets.TryRemove(marketId, out o);
+                        observers.TryRemove(marketId, out ob);
+                    });
+                })
+                .Publish()
+                .RefCount();
 
             markets.AddOrUpdate(marketId, observable, (key, existingVal) => existingVal);
+            marketAdded = true;
             return observable;
         }
 
@@ -118,6 +123,9 @@ namespace BetfairNG
                                     int waitMs = (1000 / connectionCount) - (int)DateTime.Now.Subtract(lastRequestStart).TotalMilliseconds;
                                     Thread.Sleep(waitMs > 0 ? waitMs : 0);
                                 }
+
+                                var stopWatch = new Stopwatch();
+                                stopWatch.Start();
 
                                 lock (lockObj)
                                     lastRequestStart = DateTime.Now;
@@ -157,12 +165,21 @@ namespace BetfairNG
                                     foreach (var observer in observers)
                                         observer.Value.OnError(book.Error);
                                 }
+                                //var j = 0;
+
+                                //int sleepTime = samplePeriod - (int)DateTime.Now.Subtract(lastRequestStart).TotalMilliseconds;
+
+                                while (stopWatch.ElapsedMilliseconds < samplePeriod && !marketAdded)
+                                {
+                                    await Task.Delay(sampleFrequency);
+                                    //j = j + sampleFrequency;
+                                }
+                                marketAdded = false;
+                                //var x = stopWatch.ElapsedMilliseconds;
                             }
                             else
                                 // TODO:// will die with rx scheduler
-                                Thread.Sleep(500);
-                            if (samplePeriod > 0)
-                                await Task.Delay(samplePeriod);
+                                await Task.Delay(500);
                         }
                     });
                 Thread.Sleep(1000 / connectionCount);
