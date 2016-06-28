@@ -113,6 +113,21 @@ namespace BetfairNG
             this.networkClient = new Network(this.appKey, this.sessionToken, this.preNetworkRequest, true, this.proxy);
         }
         
+        public bool Login(string p12CertificateLocation, string username, string password)
+        {
+            if (string.IsNullOrWhiteSpace(p12CertificateLocation)) throw new ArgumentException("p12CertificateLocation");
+            if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+            if (!File.Exists(p12CertificateLocation)) throw new ArgumentException("p12CertificateLocation not found");
+
+            if (preNetworkRequest != null)
+                preNetworkRequest();
+
+            string postData = string.Format("username={0}&password={1}", username, password);
+            X509Certificate2 x509certificate = new X509Certificate2(p12CertificateLocation);
+            return login(x509certificate, postData);
+        }
+
         public bool Login(string p12CertificateLocation, string p12CertificatePassword, string username, string password)
         {
             if (string.IsNullOrWhiteSpace(p12CertificateLocation)) throw new ArgumentException("p12CertificateLocation");
@@ -126,6 +141,23 @@ namespace BetfairNG
 
             string postData = string.Format("username={0}&password={1}", username, password);
             X509Certificate2 x509certificate = new X509Certificate2(p12CertificateLocation, p12CertificatePassword);
+            return login(x509certificate, postData);
+        }
+
+        public bool Login(X509Certificate2 x509certificate, string username, string password)
+        {
+            if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+
+            if (preNetworkRequest != null)
+                preNetworkRequest();
+
+            string postData = string.Format("username={0}&password={1}", username, password);
+            return login(x509certificate, postData);
+        }
+
+        private bool login(X509Certificate2 x509certificate, string postData)
+        {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://identitysso-api.betfair.com/api/certlogin");
             request.UseDefaultCredentials = true;
             request.Method = "POST";

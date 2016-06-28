@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,9 +33,19 @@ namespace BetfairNG
             client = new BetfairClient(exchange, appKey, preNetworkRequest, proxy);
         }
 
+        public bool Login(string p12CertificateLocation, string username, string password)
+        {
+            return client.Login(p12CertificateLocation, username, password);
+        }
+
         public bool Login(string p12CertificateLocation, string p12CertificatePassword, string username, string password)
         {
             return client.Login(p12CertificateLocation, p12CertificatePassword, username, password);
+        }
+
+        public bool Login(X509Certificate2 p12Certificate, string username, string password)
+        {
+            return client.Login(p12Certificate, username, password);
         }
 
         public BetfairServerResponse<KeepAliveResponse> KeepAlive()

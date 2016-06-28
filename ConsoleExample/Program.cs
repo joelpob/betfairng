@@ -21,8 +21,8 @@ public class ConsoleExample
     public static void Main()
     {
         // TODO:// replace with your app details and Betfair username/password
-        BetfairClient client = new BetfairClient(Exchange.UK, "APPKEY");
-        client.Login(@"client-2048.p12", "certpass", "username", "password");
+        BetfairClient client = new BetfairClient(Exchange.UK, "anlgReL0ogsRK3s7");
+        client.Login(@"client-2048.p12", "rogervango", "e1ddaM@52");
 
         // find all the upcoming UK horse races (EventTypeId 7)
         var marketFilter = new MarketFilter();
@@ -83,7 +83,7 @@ public class ConsoleExample
         });
         Console.WriteLine();
 
-        var marketListener = MarketListener.Create(client, BFHelpers.HorseRacePriceProjection(), 1);
+        var marketListener = MarketListener.Create(client, BFHelpers.HorseRacePriceProjection(), 1, 10000);
 
         while (Markets.Count > 0)
         {
