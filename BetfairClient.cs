@@ -126,7 +126,7 @@ namespace BetfairNG
 
             string postData = string.Format("username={0}&password={1}", username, password);
             X509Certificate2 x509certificate = new X509Certificate2(p12CertificateLocation, p12CertificatePassword);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://identitysso-api.betfair.com/api/certlogin");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://identitysso.betfair.com/api/certlogin");
             request.UseDefaultCredentials = true;
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
