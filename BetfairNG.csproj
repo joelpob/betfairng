@@ -87,9 +87,12 @@
     <Compile Include="Data\ItemDescription.cs" />
     <Compile Include="Data\MarketVersion.cs" />
     <Compile Include="Data\OrderBy.cs" />
+    <Compile Include="Data\RaceDetails.cs" />
+    <Compile Include="Data\RaceStatus.cs" />
     <Compile Include="Data\ReplaceExecutionReport.cs" />
     <Compile Include="Data\ReplaceInstruction.cs" />
     <Compile Include="Data\ReplaceInstructionReport.cs" />
+    <Compile Include="Data\ResponseCode.cs" />
     <Compile Include="Data\RunnerId.cs" />
     <Compile Include="Data\SortDir.cs" />
     <Compile Include="Data\StatementItem.cs" />

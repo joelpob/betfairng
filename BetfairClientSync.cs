@@ -236,5 +236,12 @@ namespace BetfairNG
         {
             return client.TransferFunds(from, to, amount).Result;
         }
+
+        public BetfairServerResponse<List<RaceDetails>> ListRaceDetails(
+            ISet<string> meetingIds,
+            ISet<string> raceIds)
+        {
+            return client.ListRaceDetails(meetingIds, raceIds).Result;
+        }
     }
 }

@@ -34,6 +34,13 @@ public class ConsoleExample
         };
         marketFilter.MarketTypeCodes = new HashSet<String>() { "WIN" };
 
+        Console.WriteLine("BetfairClient.ListEvents()");
+        var events = client.ListEvents(marketFilter).Result;
+        if (events.HasError)
+            throw new ApplicationException();
+        var firstEvent = events.Response.First();
+        Console.WriteLine("First Event {0} {1}", firstEvent.Event.Id, firstEvent.Event.Name);
+
         Console.WriteLine("BetfairClient.ListTimeRanges()");
         var timeRanges = client.ListTimeRanges(marketFilter, TimeGranularity.HOURS).Result;
         if (timeRanges.HasError)
@@ -76,12 +83,18 @@ public class ConsoleExample
             MarketSort.FIRST_TO_START,
             25).Result.Response;
 
+        
         marketCatalogues.ForEach(c =>
         {
             Markets.Enqueue(c);
             Console.WriteLine(c.MarketName);
         });
         Console.WriteLine();
+
+        Console.WriteLine("BetfairClient.ListRaceDetails()");
+        var firstMarket = marketCatalogues.First();
+        var raceDetails = client.ListRaceDetails(new HashSet<string>() { firstMarket.Event.Id }).Result;
+        Console.WriteLine("ListRaceDetails {0} {1}", raceDetails.Response.First().MeetingId, raceDetails.Response.First().RaceStatus.ToString());
 
         var marketListener = MarketListener.Create(client, BFHelpers.HorseRacePriceProjection(), 1);
 

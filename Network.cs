@@ -103,8 +103,10 @@ namespace BetfairNG
 
             if (endpoint == Endpoint.Betting)
                 url += "/betting/json-rpc/v1";
-            else
+            else if (endpoint == Endpoint.Account)
                 url += "/account/json-rpc/v1";
+            else if (endpoint == Endpoint.Scores)
+                url += "/scores/json-rpc/v1";
 
             var call = new JsonRequest { Method = method, Id = 1, Params = args };
             var requestData = JsonConvert.Serialize(call);
