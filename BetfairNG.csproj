@@ -71,6 +71,7 @@
     <Compile Include="Data\AccountStatementReport.cs" />
     <Compile Include="Data\APINGException.cs" />
     <Compile Include="Data\BetStatus.cs" />
+    <Compile Include="Data\BetTargetType.cs" />
     <Compile Include="Data\CancelExecutionReport.cs" />
     <Compile Include="Data\CancelInstruction.cs" />
     <Compile Include="Data\CancelInstructionReport.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Data\IncludeItem.cs" />
     <Compile Include="Data\ItemClass.cs" />
     <Compile Include="Data\ItemDescription.cs" />
+    <Compile Include="Data\MarketVersion.cs" />
     <Compile Include="Data\OrderBy.cs" />
     <Compile Include="Data\ReplaceExecutionReport.cs" />
     <Compile Include="Data\ReplaceInstruction.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="Data\SortDir.cs" />
     <Compile Include="Data\StatementItem.cs" />
     <Compile Include="Data\StatementLegacyData.cs" />
+    <Compile Include="Data\TimeInForce.cs" />
     <Compile Include="Data\TransferResponse.cs" />
     <Compile Include="Data\UpdateExecutionReport.cs" />
     <Compile Include="Data\UpdateInstruction.cs" />
