@@ -50,6 +50,9 @@ namespace BetfairNG.Data
         [JsonProperty(PropertyName = "rulesHasDate")]
         public bool RulesHasDate { get; set; }
 
+        [JsonProperty(PropertyName = "eachWayDivisor")]
+        public double EachWayDivisor { get; set; }
+
         [JsonProperty(PropertyName = "clarifications")]
         public string Clarifications { get; set; }
 

@@ -88,9 +88,9 @@ namespace BetfairNG
         public static string MarketBookConsole(
             MarketCatalogue marketCatalogue,
             MarketBook marketBook,
-            IEnumerable<RunnerDescription> runnerDescriptions,
-            Func<RunnerDescription, Runner, string> backSide = null,
-            Func<RunnerDescription, Runner, string> laySide = null)
+            IEnumerable<RunnerCatalog> runnerDescriptions,
+            Func<RunnerCatalog, Runner, string> backSide = null,
+            Func<RunnerCatalog, Runner, string> laySide = null)
         {
             var nearestBacks = marketBook.Runners
                 .Where(c => c.Status == RunnerStatus.ACTIVE)
@@ -145,7 +145,7 @@ namespace BetfairNG
             return sb.ToString();
         }
 
-        public static string ToStringRunnerName(IEnumerable<RunnerDescription> descriptions, IEnumerable<Runner> runners)
+        public static string ToStringRunnerName(IEnumerable<RunnerCatalog> descriptions, IEnumerable<Runner> runners)
         {
             StringBuilder builder = new StringBuilder();
 

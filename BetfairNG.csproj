@@ -94,6 +94,7 @@
     <Compile Include="Data\ReplaceInstruction.cs" />
     <Compile Include="Data\ReplaceInstructionReport.cs" />
     <Compile Include="Data\ResponseCode.cs" />
+    <Compile Include="Data\RunnerCatalog.cs" />
     <Compile Include="Data\RunnerId.cs" />
     <Compile Include="Data\SortDir.cs" />
     <Compile Include="Data\StatementItem.cs" />
@@ -145,7 +146,6 @@
     <Compile Include="Data\PriceSize.cs" />
     <Compile Include="Data\RollUpModel.cs" />
     <Compile Include="Data\Runner.cs" />
-    <Compile Include="Data\RunnerDescription.cs" />
     <Compile Include="Data\RunnerProfitAndLoss.cs" />
     <Compile Include="Data\RunnerStatus.cs" />
     <Compile Include="Data\Side.cs" />

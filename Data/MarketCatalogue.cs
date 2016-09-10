@@ -27,16 +27,16 @@ namespace BetfairNG.Data
         public double TotalMatched { get; set; }
         
         [JsonProperty(PropertyName = "runners")]
-        public List<RunnerDescription> Runners { get; set; }
+        public List<RunnerCatalog> Runners { get; set; }
 
         [JsonProperty(PropertyName = "eventType")]
         public EventType EventType { get; set; }
 
-        [JsonProperty(PropertyName = "event")]
-        public Event Event { get; set; }
-
         [JsonProperty(PropertyName = "competition")]
         public Competition Competition { get; set; }
+
+        [JsonProperty(PropertyName = "event")]
+        public Event Event { get; set; }
 
         public override string ToString()
         {
