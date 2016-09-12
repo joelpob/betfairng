@@ -13,7 +13,8 @@ namespace BetfairNG.Data
         COMPETITION, 
         EVENT, 
         EVENT_TYPE, 
-        MARKET_DESCRIPTION, 
+        MARKET_DESCRIPTION,
+        MARKET_START_TIME,
         RUNNER_DESCRIPTION, 
         RUNNER_METADATA 
     }
