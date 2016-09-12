@@ -49,6 +49,8 @@ namespace BetfairNG
         private static readonly string LIST_CURRENCY_RATES = "AccountAPING/v1.0/listCurrencyRates";
         private static readonly string TRANSFER_FUNDS = "AccountAPING/v1.0/transferFunds";
 
+        private static readonly string LIST_RACE_DETAILS = "ScoresAPING/v1.0/listRaceDetails";
+
         private static readonly string FILTER = "filter";
         private static readonly string BET_IDS = "betIds";
         private static readonly string RUNNER_IDS = "runnerIds";
@@ -84,6 +86,9 @@ namespace BetfairNG
         private static readonly string TO = "to";
         private static readonly string AMOUNT = "amount";
         private static readonly string WALLET = "wallet";
+        private static readonly string MARKET_VERSION = "marketVersion";
+        private static readonly string MEETINGIDS = "meetingIds";
+        private static readonly string RACEIDS = "raceIds";
 
         public BetfairClient(Exchange exchange, string appKey, Action preNetworkRequest = null, WebProxy proxy = null)
         {
@@ -313,13 +318,15 @@ namespace BetfairNG
         public Task<BetfairServerResponse<PlaceExecutionReport>> PlaceOrders(
             string marketId, 
             IList<PlaceInstruction> placeInstructions,
-            string customerRef = null)
+            string customerRef = null,
+            MarketVersion marketVersion = null)
         {
             var args = new Dictionary<string, object>();
 
             args[MARKET_ID] = marketId;
             args[INSTRUCTIONS] = placeInstructions;
             args[CUSTOMER_REFERENCE] = customerRef;
+            args[MARKET_VERSION] = marketVersion;
 
             return networkClient.Invoke<PlaceExecutionReport>(exchange, Endpoint.Betting, PLACE_ORDERS_METHOD, args);
         }
@@ -341,13 +348,15 @@ namespace BetfairNG
         public Task<BetfairServerResponse<ReplaceExecutionReport>> ReplaceOrders(
             string marketId,
             IList<ReplaceInstruction> instructions,
-            string customerRef = null)
+            string customerRef = null,
+            MarketVersion marketVersion = null)
         {
             var args = new Dictionary<string, object>();
 
             args[MARKET_ID] = marketId;
             args[INSTRUCTIONS] = instructions;
             args[CUSTOMER_REFERENCE] = customerRef;
+            args[MARKET_VERSION] = marketVersion;
 
             return networkClient.Invoke<ReplaceExecutionReport>(exchange, Endpoint.Betting, REPLACE_ORDERS_METHOD, args);
         }
@@ -405,18 +414,29 @@ namespace BetfairNG
             args[AMOUNT] = amount;
             return networkClient.Invoke<TransferResponse>(exchange, Endpoint.Account, TRANSFER_FUNDS, args);
         }
+
+        public Task<BetfairServerResponse<List<RaceDetails>>> ListRaceDetails(
+            ISet<string> meetingIds = null,
+            ISet<string> raceIds = null)
+        {
+            var args = new Dictionary<string, object>();
+            args[MEETINGIDS] = meetingIds;
+            args[RACEIDS] = raceIds;
+            return networkClient.Invoke<List<RaceDetails>>(exchange, Endpoint.Scores, LIST_RACE_DETAILS, args);
+        }
     }
 
     public enum Exchange
     {
         UK,
-        AUS
+        AUS,
     }
 
     public enum Endpoint
     {
         Betting,
-        Account
+        Account,
+        Scores,
     }
 
     public class LoginResponse

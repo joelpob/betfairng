@@ -30,12 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoreLinq.Portable, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
-      <HintPath>packages\MoreLinq.Portable.1.4.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\MoreLinq.Portable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -76,6 +72,7 @@
     <Compile Include="Data\AccountStatementReport.cs" />
     <Compile Include="Data\APINGException.cs" />
     <Compile Include="Data\BetStatus.cs" />
+    <Compile Include="Data\BetTargetType.cs" />
     <Compile Include="Data\CancelExecutionReport.cs" />
     <Compile Include="Data\CancelInstruction.cs" />
     <Compile Include="Data\CancelInstructionReport.cs" />
@@ -89,14 +86,20 @@
     <Compile Include="Data\IncludeItem.cs" />
     <Compile Include="Data\ItemClass.cs" />
     <Compile Include="Data\ItemDescription.cs" />
+    <Compile Include="Data\MarketVersion.cs" />
     <Compile Include="Data\OrderBy.cs" />
+    <Compile Include="Data\RaceDetails.cs" />
+    <Compile Include="Data\RaceStatus.cs" />
     <Compile Include="Data\ReplaceExecutionReport.cs" />
     <Compile Include="Data\ReplaceInstruction.cs" />
     <Compile Include="Data\ReplaceInstructionReport.cs" />
+    <Compile Include="Data\ResponseCode.cs" />
+    <Compile Include="Data\RunnerCatalog.cs" />
     <Compile Include="Data\RunnerId.cs" />
     <Compile Include="Data\SortDir.cs" />
     <Compile Include="Data\StatementItem.cs" />
     <Compile Include="Data\StatementLegacyData.cs" />
+    <Compile Include="Data\TimeInForce.cs" />
     <Compile Include="Data\TransferResponse.cs" />
     <Compile Include="Data\UpdateExecutionReport.cs" />
     <Compile Include="Data\UpdateInstruction.cs" />
@@ -143,7 +146,6 @@
     <Compile Include="Data\PriceSize.cs" />
     <Compile Include="Data\RollUpModel.cs" />
     <Compile Include="Data\Runner.cs" />
-    <Compile Include="Data\RunnerDescription.cs" />
     <Compile Include="Data\RunnerProfitAndLoss.cs" />
     <Compile Include="Data\RunnerStatus.cs" />
     <Compile Include="Data\Side.cs" />
