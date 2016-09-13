@@ -156,6 +156,8 @@
     <Compile Include="Data\Wallet.cs" />
     <Compile Include="JsonConvert.cs" />
     <Compile Include="MarketListener.cs" />
+    <Compile Include="MarketListenerPeriodic.cs" />
+    <Compile Include="MarketListenerMultiPeriod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Network.cs" />
   </ItemGroup>
