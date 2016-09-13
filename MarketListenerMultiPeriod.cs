@@ -85,51 +85,20 @@ namespace BetfairNG
             if (_markets.TryGetValue(marketId, out market))
                 return market;
 
-            // Keep the poll interval reasonable...
-            if (pollIntervalInSeconds < 0.15) pollIntervalInSeconds = 0.15;
-
-            ConcurrentDictionary<string, bool> marketIdsForPollInterval;
-            if (_marketPollInterval.TryGetValue(pollIntervalInSeconds, out marketIdsForPollInterval))
-            {
-                marketIdsForPollInterval.TryAdd(marketId, false);
-            }
-            else
-            {
-                marketIdsForPollInterval = new ConcurrentDictionary<string, bool>();
-                marketIdsForPollInterval.TryAdd(marketId, false);
-
-                _marketPollInterval.TryAdd(pollIntervalInSeconds, marketIdsForPollInterval);
-                _polling.TryAdd(pollIntervalInSeconds, new Poller(
-                    Observable.Interval(TimeSpan.FromSeconds(pollIntervalInSeconds),NewThreadScheduler.Default)
-                        .Subscribe(
-                            onNext: l => DoWork(pollIntervalInSeconds)
-                            //, onCompleted: TODO: do I need some clean up here?
-                        )));
-            }
+            SetupMarketPolling(marketId, pollIntervalInSeconds);
 
             var observable = Observable.Create<MarketBook>(
-               (IObserver<MarketBook> observer) =>
+               observer =>
                {
                    _observers.AddOrUpdate(marketId, observer, (key, existingVal) => existingVal);
                    return Disposable.Create(() =>
                    {
                        IObserver<MarketBook> ob;
                        IObservable<MarketBook> o;
-                       bool pi;
                        _markets.TryRemove(marketId, out o);
                        _observers.TryRemove(marketId, out ob);
-                       _marketPollInterval[pollIntervalInSeconds].TryRemove(marketId, out pi);
-                       if (!_marketPollInterval[pollIntervalInSeconds].IsEmpty) return;
-                       // All the markets have gone for this interval, so clean the interval + polling up as well
-                       ConcurrentDictionary<string, bool> pis;
-                       if (_marketPollInterval.TryRemove(pollIntervalInSeconds, out pis))
-                       {
-                           Poller poll;
-                           if (_polling.TryRemove(pollIntervalInSeconds, out poll))
-                           {
-                               poll.Dispose();
-                           }
-                       }
+                       
+                       CleanUpPolling(marketId);
                    });
                })
                .Publish()
@@ -182,6 +151,69 @@ namespace BetfairNG
                     o.OnNext(market);
             }
 
+        }
+
+        public void UpdatePollInterval(string marketId, double newPollIntervalInSeconds)
+        {
+            if (!_markets.Keys.Contains(marketId)) return;
+
+            lock (_lockObj)
+            {
+                // First, remove the existing entry
+                CleanUpPolling(marketId);
+                // Now put this marketId into the new interval
+                SetupMarketPolling(marketId, newPollIntervalInSeconds);
+            }
+        }
+
+        private void SetupMarketPolling(string marketId, double pollIntervalInSeconds)
+        {
+            // Keep the poll interval reasonable...
+            if (pollIntervalInSeconds < 0.15) pollIntervalInSeconds = 0.15;
+
+            ConcurrentDictionary<string, bool> marketIdsForPollInterval;
+            if (_marketPollInterval.TryGetValue(pollIntervalInSeconds, out marketIdsForPollInterval))
+            {
+                marketIdsForPollInterval.TryAdd(marketId, false);
+            }
+            else
+            {
+                marketIdsForPollInterval = new ConcurrentDictionary<string, bool>();
+                marketIdsForPollInterval.TryAdd(marketId, false);
+
+                _marketPollInterval.TryAdd(pollIntervalInSeconds, marketIdsForPollInterval);
+                _polling.TryAdd(pollIntervalInSeconds, new Poller(
+                    Observable.Interval(TimeSpan.FromSeconds(pollIntervalInSeconds), NewThreadScheduler.Default)
+                        .Subscribe(
+                            onNext: l => DoWork(pollIntervalInSeconds)
+                            //, onCompleted: TODO: do I need some clean up here?
+                        )));
+            }
+        }
+
+        private void CleanUpPolling(string marketId)
+        {
+            // Find the interval that the market is now running under
+            var interval = _marketPollInterval.First(search => search.Value.Keys.Contains(marketId)).Key;
+
+            ConcurrentDictionary<string, bool> mpi;
+            if (_marketPollInterval.TryGetValue(interval, out mpi))
+            {
+                bool pi;
+                mpi.TryRemove(marketId, out pi);
+
+                if (!mpi.IsEmpty) return;
+                // All the markets have gone for this interval, so clean the interval + polling up as well
+                ConcurrentDictionary<string, bool> pis;
+                if (_marketPollInterval.TryRemove(interval, out pis))
+                {
+                    Poller poll;
+                    if (_polling.TryRemove(interval, out poll))
+                    {
+                        poll.Dispose();
+                    }
+                }
+            }
         }
 
         public void Dispose()
