@@ -14,7 +14,7 @@ public class ConsoleExample
     public static void Main()
     {
         // TODO:// replace with your app details and Betfair username/password
-        BetfairClient client = new BetfairClient(Exchange.UK, "APPKEY");
+        BetfairClient client = new BetfairClient("APPKEY");
         client.Login(@"client-2048.p12", "certpass", "username", "password");
 
         /*
@@ -23,9 +23,9 @@ public class ConsoleExample
          * MultiPeriodExample runs a version of MarketListenerPeriodic (MarketListenerMultiPeriod), using potentially differing poll intervals per market book
          */
 
-        //var example = new OriginalExample(client); // This example blocks within GO
+        var example = new OriginalExample(client); // This example blocks within GO
         //var example = new PeriodicExample(client, 0.5);
-        var example = new MultiPeriodExample(client);
+        //var example = new MultiPeriodExample(client);
         example.Go();
 
         if(!example.IsBlocking) Thread.Sleep(TimeSpan.FromMinutes(20));

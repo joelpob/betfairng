@@ -83,7 +83,6 @@ namespace BetfairNG
         }
 
         public Task<BetfairServerResponse<T>> Invoke<T>(
-            Exchange exchange, 
             Endpoint endpoint, 
             string method, 
             IDictionary<string, object> args = null)
@@ -95,11 +94,7 @@ namespace BetfairNG
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            string url = string.Empty;
-            if (exchange == Exchange.AUS)
-                url = "https://api-au.betfair.com/exchange";
-            else
-                url = "https://api.betfair.com/exchange";
+            string url = "https://api.betfair.com/exchange";
 
             if (endpoint == Endpoint.Betting)
                 url += "/betting/json-rpc/v1";

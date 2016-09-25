@@ -18,7 +18,6 @@ namespace BetfairNG
     /// </summary>
     public class BetfairClient
     {
-        private Exchange exchange;
         private Network networkClient;
         private string appKey;
         private string sessionToken;
@@ -90,19 +89,16 @@ namespace BetfairNG
         private static readonly string MEETINGIDS = "meetingIds";
         private static readonly string RACEIDS = "raceIds";
 
-        public BetfairClient(Exchange exchange, string appKey, Action preNetworkRequest = null, WebProxy proxy = null)
+        public BetfairClient(string appKey, Action preNetworkRequest = null, WebProxy proxy = null)
         {
             if (string.IsNullOrWhiteSpace(appKey)) throw new ArgumentException("appKey");
 
-            this.exchange = exchange;
             this.appKey = appKey;
             this.preNetworkRequest = preNetworkRequest;
             this.proxy = proxy;
         }
 
-        public BetfairClient(
-            Exchange exchange, 
-            string appKey, 
+        public BetfairClient(string appKey, 
             string sessionToken, 
             Action preNetworkRequest = null,
             WebProxy proxy = null)
@@ -110,7 +106,6 @@ namespace BetfairNG
             if (string.IsNullOrWhiteSpace(appKey)) throw new ArgumentException("appKey");
             if (string.IsNullOrWhiteSpace(sessionToken)) throw new ArgumentException("sessionToken");
 
-            this.exchange = exchange;
             this.appKey = appKey;
             this.sessionToken = sessionToken;
             this.preNetworkRequest = preNetworkRequest;
@@ -172,14 +167,14 @@ namespace BetfairNG
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<CompetitionResult>>(exchange, Endpoint.Betting, LIST_COMPETITIONS_METHOD, args);
+            return networkClient.Invoke<List<CompetitionResult>>(Endpoint.Betting, LIST_COMPETITIONS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<CountryCodeResult>>> ListCountries(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<CountryCodeResult>>(exchange, Endpoint.Betting, LIST_COUNTRIES_METHOD, args);
+            return networkClient.Invoke<List<CountryCodeResult>>(Endpoint.Betting, LIST_COUNTRIES_METHOD, args);
         }
 
         public Task<BetfairServerResponse<CurrentOrderSummaryReport>> ListCurrentOrders(
@@ -203,7 +198,7 @@ namespace BetfairNG
             args[SORT_DIR] = sortDir;
             args[FROM_RECORD] = fromRecord;
             args[RECORD_COUNT] = recordCount;
-            return networkClient.Invoke<CurrentOrderSummaryReport>(exchange, Endpoint.Betting, LIST_CURRENT_ORDERS_METHOD, args);
+            return networkClient.Invoke<CurrentOrderSummaryReport>(Endpoint.Betting, LIST_CURRENT_ORDERS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<ClearedOrderSummaryReport>> ListClearedOrders(
@@ -234,21 +229,21 @@ namespace BetfairNG
             args[FROM_RECORD] = fromRecord;
             args[RECORD_COUNT] = recordCount;
 
-            return networkClient.Invoke<ClearedOrderSummaryReport>(exchange, Endpoint.Betting, LIST_CLEARED_ORDERS_METHOD, args);
+            return networkClient.Invoke<ClearedOrderSummaryReport>(Endpoint.Betting, LIST_CLEARED_ORDERS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<EventResult>>> ListEvents(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<EventResult>>(exchange, Endpoint.Betting, LIST_EVENTS_METHOD, args);
+            return networkClient.Invoke<List<EventResult>>(Endpoint.Betting, LIST_EVENTS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<EventTypeResult>>> ListEventTypes(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<EventTypeResult>>(exchange, Endpoint.Betting, LIST_EVENT_TYPES_METHOD, args);
+            return networkClient.Invoke<List<EventTypeResult>>(Endpoint.Betting, LIST_EVENT_TYPES_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<MarketBook>>> ListMarketBook(
@@ -262,7 +257,7 @@ namespace BetfairNG
             args[PRICE_PROJECTION] = priceProjection;
             args[ORDER_PROJECTION] = orderProjection;
             args[MATCH_PROJECTION] = matchProjection;
-            return networkClient.Invoke<List<MarketBook>>(exchange, Endpoint.Betting, LIST_MARKET_BOOK_METHOD, args);
+            return networkClient.Invoke<List<MarketBook>>(Endpoint.Betting, LIST_MARKET_BOOK_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<MarketCatalogue>>> ListMarketCatalogue(
@@ -276,7 +271,7 @@ namespace BetfairNG
             args[MARKET_PROJECTION] = marketProjections;
             args[SORT] = sort;
             args[MAX_RESULTS] = maxResult;
-            return networkClient.Invoke<List<MarketCatalogue>>(exchange, Endpoint.Betting, LIST_MARKET_CATALOGUE_METHOD, args);
+            return networkClient.Invoke<List<MarketCatalogue>>(Endpoint.Betting, LIST_MARKET_CATALOGUE_METHOD, args);
         }
 
         public Task<BetfairServerResponse<List<MarketProfitAndLoss>>> ListMarketProfitAndLoss(
@@ -290,14 +285,14 @@ namespace BetfairNG
             args[INCLUDE_SETTLED_BETS] = includeSettledBets;
             args[INCLUDE_BSP_BETS] = includeBsbBets;
             args[NET_OF_COMMISSION] = netOfCommission;
-            return networkClient.Invoke<List<MarketProfitAndLoss>>(exchange, Endpoint.Betting, LIST_MARKET_PROFIT_AND_LOSS, args);
+            return networkClient.Invoke<List<MarketProfitAndLoss>>(Endpoint.Betting, LIST_MARKET_PROFIT_AND_LOSS, args);
         }
 
         public Task<BetfairServerResponse<List<MarketTypeResult>>> ListMarketTypes(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<MarketTypeResult>>(exchange, Endpoint.Betting, LIST_MARKET_TYPES, args);
+            return networkClient.Invoke<List<MarketTypeResult>>(Endpoint.Betting, LIST_MARKET_TYPES, args);
         }
 
         public Task<BetfairServerResponse<List<TimeRangeResult>>> ListTimeRanges(MarketFilter marketFilter, TimeGranularity timeGranularity)
@@ -305,14 +300,14 @@ namespace BetfairNG
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
             args[GRANULARITY] = timeGranularity;
-            return networkClient.Invoke<List<TimeRangeResult>>(exchange, Endpoint.Betting, LIST_TIME_RANGES, args);
+            return networkClient.Invoke<List<TimeRangeResult>>(Endpoint.Betting, LIST_TIME_RANGES, args);
         }
 
         public Task<BetfairServerResponse<List<VenueResult>>> ListVenues(MarketFilter marketFilter)
         {
             var args = new Dictionary<string, object>();
             args[FILTER] = marketFilter;
-            return networkClient.Invoke<List<VenueResult>>(exchange, Endpoint.Betting, LIST_VENUES, args);
+            return networkClient.Invoke<List<VenueResult>>(Endpoint.Betting, LIST_VENUES, args);
         }
 
         public Task<BetfairServerResponse<PlaceExecutionReport>> PlaceOrders(
@@ -328,7 +323,7 @@ namespace BetfairNG
             args[CUSTOMER_REFERENCE] = customerRef;
             args[MARKET_VERSION] = marketVersion;
 
-            return networkClient.Invoke<PlaceExecutionReport>(exchange, Endpoint.Betting, PLACE_ORDERS_METHOD, args);
+            return networkClient.Invoke<PlaceExecutionReport>(Endpoint.Betting, PLACE_ORDERS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<CancelExecutionReport>> CancelOrders(
@@ -342,7 +337,7 @@ namespace BetfairNG
             args[MARKET_ID] = marketId;
             args[CUSTOMER_REFERENCE] = customerRef;
 
-            return networkClient.Invoke<CancelExecutionReport>(exchange, Endpoint.Betting, CANCEL_ORDERS_METHOD, args);
+            return networkClient.Invoke<CancelExecutionReport>(Endpoint.Betting, CANCEL_ORDERS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<ReplaceExecutionReport>> ReplaceOrders(
@@ -358,7 +353,7 @@ namespace BetfairNG
             args[CUSTOMER_REFERENCE] = customerRef;
             args[MARKET_VERSION] = marketVersion;
 
-            return networkClient.Invoke<ReplaceExecutionReport>(exchange, Endpoint.Betting, REPLACE_ORDERS_METHOD, args);
+            return networkClient.Invoke<ReplaceExecutionReport>(Endpoint.Betting, REPLACE_ORDERS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<UpdateExecutionReport>> UpdateOrders(
@@ -372,20 +367,20 @@ namespace BetfairNG
             args[INSTRUCTIONS] = instructions;
             args[CUSTOMER_REFERENCE] = customerRef;
 
-            return networkClient.Invoke<UpdateExecutionReport>(exchange, Endpoint.Betting, UPDATE_ORDERS_METHOD, args);
+            return networkClient.Invoke<UpdateExecutionReport>(Endpoint.Betting, UPDATE_ORDERS_METHOD, args);
         }
 
         public Task<BetfairServerResponse<AccountDetailsResponse>> GetAccountDetails()
         {
             var args = new Dictionary<string, object>();
-            return networkClient.Invoke<AccountDetailsResponse>(exchange, Endpoint.Account, GET_ACCOUNT_DETAILS, args);
+            return networkClient.Invoke<AccountDetailsResponse>(Endpoint.Account, GET_ACCOUNT_DETAILS, args);
         }
 
         public Task<BetfairServerResponse<AccountFundsResponse>> GetAccountFunds(Wallet wallet)
         {
             var args = new Dictionary<string, object>();
             args[WALLET] = wallet;
-            return networkClient.Invoke<AccountFundsResponse>(exchange, Endpoint.Account, GET_ACCOUNT_FUNDS, args);
+            return networkClient.Invoke<AccountFundsResponse>(Endpoint.Account, GET_ACCOUNT_FUNDS, args);
         }
 
         public Task<BetfairServerResponse<AccountStatementReport>> GetAccountStatement(
@@ -396,14 +391,14 @@ namespace BetfairNG
             Wallet? wallet = null)
         {
             var args = new Dictionary<string, object>();
-            return networkClient.Invoke<AccountStatementReport>(exchange, Endpoint.Account, GET_ACCOUNT_STATEMENT, args);
+            return networkClient.Invoke<AccountStatementReport>(Endpoint.Account, GET_ACCOUNT_STATEMENT, args);
         }
 
         public Task<BetfairServerResponse<List<CurrencyRate>>> ListCurrencyRates(string fromCurrency)
         {
             var args = new Dictionary<string, object>();
             args[FROM_CURRENCY] = fromCurrency;
-            return networkClient.Invoke<List<CurrencyRate>>(exchange, Endpoint.Account, LIST_CURRENCY_RATES, args);
+            return networkClient.Invoke<List<CurrencyRate>>(Endpoint.Account, LIST_CURRENCY_RATES, args);
         }
 
         public Task<BetfairServerResponse<TransferResponse>> TransferFunds(Wallet from, Wallet to, double amount)
@@ -412,7 +407,7 @@ namespace BetfairNG
             args[FROM] = from;
             args[TO] = to;
             args[AMOUNT] = amount;
-            return networkClient.Invoke<TransferResponse>(exchange, Endpoint.Account, TRANSFER_FUNDS, args);
+            return networkClient.Invoke<TransferResponse>(Endpoint.Account, TRANSFER_FUNDS, args);
         }
 
         public Task<BetfairServerResponse<List<RaceDetails>>> ListRaceDetails(
@@ -422,14 +417,8 @@ namespace BetfairNG
             var args = new Dictionary<string, object>();
             args[MEETINGIDS] = meetingIds;
             args[RACEIDS] = raceIds;
-            return networkClient.Invoke<List<RaceDetails>>(exchange, Endpoint.Scores, LIST_RACE_DETAILS, args);
+            return networkClient.Invoke<List<RaceDetails>>(Endpoint.Scores, LIST_RACE_DETAILS, args);
         }
-    }
-
-    public enum Exchange
-    {
-        UK,
-        AUS,
     }
 
     public enum Endpoint

@@ -15,21 +15,19 @@ namespace BetfairNG
     {
         private BetfairClient client;
 
-        public BetfairClientSync(Exchange exchange, 
-            string appKey, 
+        public BetfairClientSync(string appKey, 
             string sessionToken, 
             Action preNetworkRequest = null,
             WebProxy proxy = null)
         { 
-            client = new BetfairClient(exchange, appKey, sessionToken, preNetworkRequest, proxy);
+            client = new BetfairClient(appKey, sessionToken, preNetworkRequest, proxy);
         }
 
-        public BetfairClientSync(Exchange exchange,
-            string appKey,
+        public BetfairClientSync(string appKey,
             Action preNetworkRequest = null,
             WebProxy proxy = null)
         {
-            client = new BetfairClient(exchange, appKey, preNetworkRequest, proxy);
+            client = new BetfairClient(appKey, preNetworkRequest, proxy);
         }
 
         public bool Login(string p12CertificateLocation, string p12CertificatePassword, string username, string password)
