@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetfairNG", "BetfairNG.csproj", "{50F55410-B461-4639-B286-0F3205413D61}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleExample", "ConsoleExample\ConsoleExample.csproj", "{D2649C42-2BC3-4541-A548-CD65C17DD05A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Betfair.ESASwagger", "Betfair.ESASwagger.csproj", "{05419E45-CAD4-4FB6-BC46-B93119D9F22D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Betfair.ESAClient", "Betfair.ESAClient.csproj", "{C6F11E1B-DA85-41BC-9DEE-B941D3C6A805}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{D2649C42-2BC3-4541-A548-CD65C17DD05A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2649C42-2BC3-4541-A548-CD65C17DD05A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2649C42-2BC3-4541-A548-CD65C17DD05A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05419E45-CAD4-4FB6-BC46-B93119D9F22D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05419E45-CAD4-4FB6-BC46-B93119D9F22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05419E45-CAD4-4FB6-BC46-B93119D9F22D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05419E45-CAD4-4FB6-BC46-B93119D9F22D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6F11E1B-DA85-41BC-9DEE-B941D3C6A805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6F11E1B-DA85-41BC-9DEE-B941D3C6A805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6F11E1B-DA85-41BC-9DEE-B941D3C6A805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6F11E1B-DA85-41BC-9DEE-B941D3C6A805}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
