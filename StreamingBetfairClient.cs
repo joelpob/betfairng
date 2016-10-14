@@ -183,7 +183,7 @@ namespace BetfairNG
 
         public void OnErrorStatusNotification(StatusMessage message)
         {
-            throw new NotImplementedException();
+            // TODO:// sort this out 
         }
 
         private void MarketCache_MarketChanged(object sender, MarketChangedEventArgs e)

@@ -18,16 +18,16 @@ namespace BetfairNG.Data
         public PersistenceType PersistenceType { get; set; }
 
         [JsonProperty(PropertyName = "timeInForce")]
-        public TimeInForce TimeInForce { get; set; }
+        public TimeInForce? TimeInForce { get; set; }
 
         [JsonProperty(PropertyName = "minFillSize")]
-        public double MinFillSize { get; set; }
+        public double? MinFillSize { get; set; }
 
         [JsonProperty(PropertyName = "betTargetType")]
-        public BetTargetType BetTargetType { get; set; }
+        public BetTargetType? BetTargetType { get; set; }
 
         [JsonProperty(PropertyName = "betTargetSize")]
-        public double BetTargetSize { get; set; }
+        public double? BetTargetSize { get; set; }
 
         public override string ToString()
         {
