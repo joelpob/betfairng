@@ -5,6 +5,7 @@ Now with [Exchange Streaming] API support (early beta). Be sure to pull in the B
 
 ```sh
 git clone https://github.com/joelpob/betfairng
+cd betfairng
 git submodule init
 git submodule update
 ```
