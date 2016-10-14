@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using System.Collections.Concurrent;
 using BetfairNG.Data;
+using Betfair.ESAClient.Cache;
 
 namespace BetfairNG
 {
@@ -58,7 +59,7 @@ namespace BetfairNG
             return 1.0 / total;
         }
 
-        public static double Best(this List<PriceSize> prices)
+        public static double Best(this List<Data.PriceSize> prices)
         {
             if (prices.Count > 0)
                 return prices.First().Price;
@@ -144,6 +145,64 @@ namespace BetfairNG
 
             return sb.ToString();
         }
+
+        public static string MarketSnapConsole(
+            MarketSnap marketSnap,
+            IEnumerable<RunnerCatalog> runnerDescriptions,
+            Func<RunnerCatalog, MarketRunnerSnap, string> backSide = null,
+            Func<RunnerCatalog, MarketRunnerSnap, string> laySide = null)
+        {
+            var nearestBacks = marketSnap.MarketRunners
+                .Select(c => c.Prices.AvailableToBack.Count > 0 ? c.Prices.AvailableToBack.First().Price : 0.0);
+            var nearestLays = marketSnap.MarketRunners
+                .Select(c => c.Prices.AvailableToLay.Count > 0 ? c.Prices.AvailableToLay.First().Price : 0.0);
+
+            var timeToJump = Convert.ToDateTime(marketSnap.MarketDefinition.OpenDate);
+            var timeRemainingToJump = timeToJump.Subtract(DateTime.UtcNow);
+
+            var sb = new StringBuilder()
+                        .AppendFormat("{0}", marketSnap.MarketDefinition.Venue)
+                        .AppendFormat(" : {0}% {1}%", BFHelpers.GetMarketEfficiency(nearestBacks).ToString("0.##"), BFHelpers.GetMarketEfficiency(nearestLays).ToString("0.##"))
+                        .AppendFormat(" : Status={0}", marketSnap.MarketDefinition.Status)
+                        .AppendFormat(" : IsInplay={0}", marketSnap.MarketDefinition.InPlay.HasValue ? marketSnap.MarketDefinition.InPlay.Value.ToString() : "")
+                        .AppendFormat(" : Runners={0}", marketSnap.MarketDefinition.NumberOfActiveRunners)
+                        .AppendFormat(" : TradedVolume={0}", marketSnap.TradedVolume);
+            sb.AppendLine();
+            sb.AppendFormat("Time To Jump: {0}h {1}:{2}",
+                  timeRemainingToJump.Hours + (timeRemainingToJump.Days * 24),
+                  timeRemainingToJump.Minutes.ToString("##"),
+                  timeRemainingToJump.Seconds.ToString("##"));
+            sb.AppendLine();
+
+            if (marketSnap.MarketRunners != null && marketSnap.MarketRunners.Count > 0)
+            {
+                foreach (var runner in marketSnap.MarketRunners.Where(c => c.Definition.Status == Betfair.ESASwagger.Model.RunnerDefinition.StatusEnum.Active))
+                {
+                    var runnerName = runnerDescriptions != null ? runnerDescriptions.FirstOrDefault(c => c.SelectionId == runner.RunnerId.SelectionId) : null;
+                    var bsString = backSide != null ? backSide(runnerName, runner) : "";
+                    var lyString = laySide != null ? laySide(runnerName, runner) : "";
+
+                    string consoleRunnerName = runnerName != null ? runnerName.RunnerName : "null";
+
+                    sb.AppendLine(string.Format("{0} {9} [{1}] {2},{3},{4}  ::  {5},{6},{7} [{8}] {10}",
+                        consoleRunnerName.PadRight(25),
+                        runner.Prices.AvailableToBack.Sum(a => a.Size).ToString("0").PadLeft(7),
+                        runner.Prices.AvailableToBack.Count > 2 ? runner.Prices.AvailableToBack[2].Price.ToString("0.00").PadLeft(6) : "  0.00",
+                        runner.Prices.AvailableToBack.Count > 1 ? runner.Prices.AvailableToBack[1].Price.ToString("0.00").PadLeft(6) : "  0.00",
+                        runner.Prices.AvailableToBack.Count > 0 ? runner.Prices.AvailableToBack[0].Price.ToString("0.00").PadLeft(6) : "  0.00",
+                        runner.Prices.AvailableToLay.Count > 0 ? runner.Prices.AvailableToLay[0].Price.ToString("0.00").PadLeft(6) : "  0.00",
+                        runner.Prices.AvailableToLay.Count > 1 ? runner.Prices.AvailableToLay[1].Price.ToString("0.00").PadLeft(6) : "  0.00",
+                        runner.Prices.AvailableToLay.Count > 2 ? runner.Prices.AvailableToLay[2].Price.ToString("0.00").PadLeft(6) : "  0.00",
+                        runner.Prices.AvailableToLay.Sum(a => a.Size).ToString("0").PadLeft(7),
+                        bsString,
+                        lyString));
+                }
+            }
+
+            return sb.ToString();
+        }
+
+
 
         public static string ToStringRunnerName(IEnumerable<RunnerCatalog> descriptions, IEnumerable<Runner> runners)
         {

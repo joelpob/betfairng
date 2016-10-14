@@ -68,6 +68,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StreamingExample.cs" />
     <Compile Include="OriginalExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +76,14 @@
     <Compile Include="PeriodicExample.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Betfair.ESAClient.csproj">
+      <Project>{c6f11e1b-da85-41bc-9dee-b941d3c6a805}</Project>
+      <Name>Betfair.ESAClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Betfair.ESASwagger.csproj">
+      <Project>{05419e45-cad4-4fb6-bc46-b93119d9f22d}</Project>
+      <Name>Betfair.ESASwagger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BetfairNG.csproj">
       <Project>{50f55410-b461-4639-b286-0f3205413d61}</Project>
       <Name>BetfairNG</Name>

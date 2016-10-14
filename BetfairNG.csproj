@@ -64,6 +64,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StreamingBetfairClient.cs" />
     <Compile Include="BetfairClient.cs" />
     <Compile Include="BetfairClientSync.cs" />
     <Compile Include="BFHelpers.cs" />
@@ -167,7 +168,16 @@
     </None>
     <None Include="README.md" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="Betfair.ESAClient.csproj">
+      <Project>{c6f11e1b-da85-41bc-9dee-b941d3c6a805}</Project>
+      <Name>Betfair.ESAClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="Betfair.ESASwagger.csproj">
+      <Project>{05419e45-cad4-4fb6-bc46-b93119d9f22d}</Project>
+      <Name>Betfair.ESASwagger</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
