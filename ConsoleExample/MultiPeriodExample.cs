@@ -26,8 +26,6 @@ public class MultiPeriodExample : IDisposable
         _client = client;
     }
 
-    public bool IsBlocking => false;
-
     public void Go()
     {
         var marketCatalogues = _client.ListMarketCatalogue(
@@ -121,8 +119,8 @@ public class MultiPeriodExample : IDisposable
 
     public void Dispose()
     {
-        _marketSubscription1?.Dispose();
-        _marketSubscription2?.Dispose();
+        if (_marketSubscription1 != null) _marketSubscription1.Dispose();
+        if (_marketSubscription2 != null) _marketSubscription2.Dispose();
     }
 }
 

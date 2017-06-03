@@ -18,7 +18,7 @@ public class OriginalExample
         _client = client;
     }
 
-    public bool IsBlocking => true;
+    public bool IsBlocking { get { return true; } }
 
     public void Go()
     {

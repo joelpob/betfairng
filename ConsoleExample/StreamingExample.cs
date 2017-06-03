@@ -20,7 +20,7 @@ public class StreamingExample
         _streamingClient = streamingClient;
     }
 
-    public bool IsBlocking => true;
+    public bool IsBlocking { get { return true; } }
 
     public void Go()
     {

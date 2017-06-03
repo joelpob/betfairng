@@ -11,7 +11,7 @@ public class PeriodicExample : IDisposable
     private readonly MarketListenerPeriodic _marketListener;
 
     private IDisposable _marketSubscription;
-    public bool IsBlocking => false;
+    public bool IsBlocking { get { return false; } }
 
     public PeriodicExample(BetfairClient client, double pollIntervalInSeconds)
     {

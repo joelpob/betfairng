@@ -131,7 +131,7 @@ namespace BetfairNG
 
         public void Dispose()
         {
-            _polling?.Dispose();
+            if (_polling != null) _polling.Dispose();
         }
     }
 }

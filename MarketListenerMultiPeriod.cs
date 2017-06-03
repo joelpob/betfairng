@@ -220,7 +220,7 @@ namespace BetfairNG
         {
             foreach (var poll in _polling)
             {
-                poll.Value?.Dispose();
+                if (poll.Value != null) poll.Value.Dispose();
             }
         }
     }
