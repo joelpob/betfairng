@@ -8,13 +8,13 @@ namespace BetfairNG.Data
 {
     public class MarketOnCloseOrder
     {
-        [JsonProperty(PropertyName = "size")]
-        public double Size { get; set; }
+        [JsonProperty(PropertyName = "liability")]
+        public double Liability { get; set; }
 
         public override string ToString()
         {
             return new StringBuilder()
-                        .AppendFormat("Size={0}", Size)
+                        .AppendFormat("liability={0}", Liability)
                         .ToString();
         }
     }
