@@ -72,17 +72,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BetfairNG.csproj">
-      <Project>{50f55410-b461-4639-b286-0f3205413d61}</Project>
-      <Name>BetfairNG</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\stream-api-sample-code\csharp\Betfair.ESAClient\Betfair.ESAClient\Betfair.ESAClient.csproj">
+    <ProjectReference Include="..\Betfair.ESAClient.csproj">
       <Project>{c6f11e1b-da85-41bc-9dee-b941d3c6a805}</Project>
       <Name>Betfair.ESAClient</Name>
     </ProjectReference>
-    <ProjectReference Include="..\stream-api-sample-code\csharp\Betfair.ESAClient\Betfair.ESASwagger\Betfair.ESASwagger.csproj">
+    <ProjectReference Include="..\Betfair.ESASwagger.csproj">
       <Project>{05419e45-cad4-4fb6-bc46-b93119d9f22d}</Project>
       <Name>Betfair.ESASwagger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BetfairNG.csproj">
+      <Project>{50f55410-b461-4639-b286-0f3205413d61}</Project>
+      <Name>BetfairNG</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
