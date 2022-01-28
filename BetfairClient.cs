@@ -330,18 +330,41 @@ namespace BetfairNG
             return networkClient.Invoke<PlaceExecutionReport>(Endpoint.Betting, PLACE_ORDERS_METHOD, args);
         }
 
-        public Task<BetfairServerResponse<CancelExecutionReport>> CancelOrders(
+        public List<Task<BetfairServerResponse<CancelExecutionReport>>> CancelOrders(
             string marketId = null,
             IList<CancelInstruction> instructions = null,
             string customerRef = null)
         {
-            var args = new Dictionary<string, object>();
+            var reports = new List<Task<BetfairServerResponse<CancelExecutionReport>>>();
 
-            args[INSTRUCTIONS] = instructions;
-            args[MARKET_ID] = marketId;
-            args[CUSTOMER_REFERENCE] = customerRef;
+            if (instructions != null)
+            {
+                for (var i = 0; i < instructions.Count; i += 60)
+                {
+                    var items = instructions.Skip(i).Take(60);
+                    var args = new Dictionary<string, object>
+                    {
+                        [INSTRUCTIONS] = items, 
+                        [MARKET_ID] = marketId, 
+                        [CUSTOMER_REFERENCE] = customerRef
+                    };
 
-            return networkClient.Invoke<CancelExecutionReport>(Endpoint.Betting, CANCEL_ORDERS_METHOD, args);
+                    reports.Add(networkClient.Invoke<CancelExecutionReport>(Endpoint.Betting, CANCEL_ORDERS_METHOD, args));
+                }
+            }
+            else
+            {
+                var args = new Dictionary<string, object>
+                {
+                    [INSTRUCTIONS] = instructions, 
+                    [MARKET_ID] = marketId, 
+                    [CUSTOMER_REFERENCE] = customerRef
+                };
+
+                reports.Add(networkClient.Invoke<CancelExecutionReport>(Endpoint.Betting, CANCEL_ORDERS_METHOD, args));
+            }
+
+            return reports;
         }
 
         public Task<BetfairServerResponse<ReplaceExecutionReport>> ReplaceOrders(
